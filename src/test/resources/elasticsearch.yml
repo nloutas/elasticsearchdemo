@@ -1,12 +1,16 @@
 cluster.name: emnify_es_test
 
-elasticHost: localhost
-elasticPort: 9300
+network.host: localhost
+http.port: 9300
 
-script.disable_dynamic: false
+script.inline: on
+script.indexed: on
+script.engine.groovy.inline.aggs: on
+script.groovy.sandbox.enabled: true
 
 client.transport.sniff: true
 client.transport.ping_timeout: "5s"
 client.transport.nodes_sampler_interval: "5s"
+
 
 path.home: /tmp/elasticsearch

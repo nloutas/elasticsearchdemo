@@ -48,6 +48,8 @@ public class ElasticIndexTest {
   public void setUp() throws Exception {
     etc.start();
     esClient = etc.getClient();
+
+    // TODO cleanup old test data
   }
 
   /**
