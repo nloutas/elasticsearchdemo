@@ -1,0 +1,9 @@
+cluster.name: emnify_es
+
+elasticHost: localhost
+elasticPort: 9200
+
+
+client.transport.sniff: true
+client.transport.ping_timeout: "5s"
+client.transport.nodes_sampler_interval: "5s"

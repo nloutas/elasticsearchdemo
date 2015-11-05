@@ -1,0 +1,12 @@
+cluster.name: emnify_es_test
+
+elasticHost: localhost
+elasticPort: 9300
+
+script.disable_dynamic: false
+
+client.transport.sniff: true
+client.transport.ping_timeout: "5s"
+client.transport.nodes_sampler_interval: "5s"
+
+path.home: /tmp/elasticsearch
