@@ -13,9 +13,6 @@ import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-
-// import static org.elasticsearch.index.query.QueryBuilders.*;
-
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.script.Script;
 import org.elasticsearch.script.ScriptService;
@@ -49,7 +46,6 @@ public class ElasticIndexTest {
     etc.start();
     esClient = etc.getClient();
 
-    // TODO cleanup old test data
   }
 
   /**
@@ -68,6 +64,7 @@ public class ElasticIndexTest {
     String idxName = "index-name";
     String idxType = "index-type";
     String id = "1";
+
 
     // generate JSON
     XContentBuilder builder = jsonBuilder().startObject()
@@ -118,15 +115,13 @@ public class ElasticIndexTest {
     collector.checkThat(searchResponse.getSuccessfulShards(), equalTo(5));
     collector.checkThat(searchResponse.getFailedShards(), equalTo(0));
     collector.checkThat(searchResponse.isContextEmpty(), is(true));
-    // TODO : why does it hit nothing?
-    collector.checkThat(searchResponse.getHits().getTotalHits(), equalTo(0L));
+    collector.checkThat(searchResponse.getHits().getTotalHits(), equalTo(1L));
 
 
     // Count
-    CountResponse count = esClient.prepareCount(idxName)
-        .execute().actionGet();
+    CountResponse count = esClient.prepareCount(idxName).execute().actionGet();
     collector.checkThat(count.status(), equalTo(RestStatus.OK));
-    collector.checkThat(count.getCount(), equalTo(0L));
+    collector.checkThat(count.getCount(), equalTo(1L));
 
     // DELETE
     DeleteResponse delResponse = esClient.prepareDelete(idxName, idxType, id).execute().actionGet();
