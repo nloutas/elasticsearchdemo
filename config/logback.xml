@@ -1,0 +1,28 @@
+<configuration>
+  <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>logs/elasticsearchdemo.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- rollover daily -->
+      <fileNamePattern>logs/elasticsearchdemo-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+      <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        <!-- or whenever the file size reaches 10MB -->
+        <maxFileSize>10MB</maxFileSize>
+      </timeBasedFileNamingAndTriggeringPolicy>
+      <maxHistory>3</maxHistory>
+    </rollingPolicy>
+    <encoder>
+      <pattern>[%d{YYYY/MM/dd HH:mm:ss.SSS}] [%thread] %-5level [%file:%line] %logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%d{[YYYY/MM/dd HH:mm:ss.SSS]} [%thread] %-5level [%file:%line] %logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <root level="INFO">
+    <appender-ref ref="ROLLING"/>
+    <appender-ref ref="STDOUT" />
+  </root>
+</configuration>
