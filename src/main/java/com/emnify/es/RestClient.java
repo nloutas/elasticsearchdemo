@@ -1,3 +1,5 @@
+package com.emnify.es;
+
 import static javax.ws.rs.client.Entity.entity;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;

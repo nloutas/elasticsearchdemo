@@ -84,7 +84,7 @@
         <version>1.4.0</version>
         <configuration>
           <killAfter>-1</killAfter>
-          <mainClass>ElasticsearchApp</mainClass>
+        <!--   <mainClass>com.emnify.es.ElasticsearchApp</mainClass>  (start with -Dexec.mainClass=com.emnify.es.Elas...) -->
           <additionalClasspathElements>
             <additionalClasspathElement>${basedir}/config</additionalClasspathElement>
             <additionalClasspathElement>${basedir}</additionalClasspathElement>
