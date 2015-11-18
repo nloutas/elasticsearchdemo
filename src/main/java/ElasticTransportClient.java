@@ -4,6 +4,10 @@ import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchRequestBuilder;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.support.QuerySourceBuilder;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.transport.TransportClient;
@@ -11,10 +15,14 @@ import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
@@ -67,8 +75,15 @@ public class ElasticTransportClient {
 
     System.out.println("GET: " + get.getSource());
 
-
-
+    SearchSourceBuilder query = new SearchSourceBuilder().query(QueryBuilders.matchQuery("user", "bier"));
+    SearchRequest searchReq = new SearchRequest().indices("twitter").types("tweet").source(query);
+  
+    System.out.println(query);
+    Thread.sleep(5000L);
+    SearchResponse searchResp= client.search(searchReq).get();
+    
+    System.out.println("SEARCH: " + searchResp);
+    
     UpdateRequest updateReq = new UpdateRequest("twitter", "tweet", "1");
     updateReq.doc(XContentFactory.jsonBuilder().startObject().field("user", "male").endObject());
 
@@ -82,7 +97,10 @@ public class ElasticTransportClient {
 
     System.out.println("GET: " + get.getSource());
 
-
+    Thread.sleep(5000L);
+    searchResp= client.search(searchReq).get();
+    
+    System.out.println("SEARCH: " + searchResp);
 
     DeleteRequest delReq = new DeleteRequest("twitter", "tweet", "1");
 

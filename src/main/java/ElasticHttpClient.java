@@ -1,6 +1,8 @@
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,12 +37,12 @@ public class ElasticHttpClient {
 
     System.out.println("GET: " + res.readEntity(String.class));
 
-    XContentBuilder queryBuilder =
-        XContentFactory.jsonBuilder().startObject().field("version",true).startObject("query").startObject("match").field("user", "bier").endObject().endObject().endObject();
+    String query = new SearchSourceBuilder().query(QueryBuilders.matchQuery("user", "bier")).toString();
     Thread.sleep(5000L);
-    res = client.search("twitter", "tweet", queryBuilder.string());
     
-    System.out.println("Search request body: " + queryBuilder.string());
+    res = client.search("twitter", "tweet", query);
+    
+    System.out.println("Search request body: " + query);
     
     System.out.println("SEARCH: " + res.readEntity(String.class));
     
@@ -50,7 +52,7 @@ public class ElasticHttpClient {
 
     System.out.println("UPDATE: " + res.readEntity(String.class));
     Thread.sleep(5000L);
-    res = client.search("twitter", "tweet", queryBuilder.string());
+    res = client.search("twitter", "tweet", query);
     System.out.println("SEARCH: " + res.readEntity(String.class));
     
 
