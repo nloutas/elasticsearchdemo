@@ -1,21 +1,24 @@
 
 
-import org.elasticsearch.client.transport.TransportClient;
-import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.transport.InetSocketTransportAddress;
-import org.elasticsearch.common.xcontent.XContentBuilder;
-import org.elasticsearch.rest.RestStatus;
-import org.elasticsearch.search.SearchHits;
+package com.emnify.es;
 
 import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 
-import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.action.count.CountResponse;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.common.xcontent.XContentBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.rest.RestStatus;
+import org.elasticsearch.search.SearchHits;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,9 +26,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * elasticsearch client
@@ -37,8 +37,8 @@ public class ElasticClient {
   private Settings settings;
   private TransportClient esClient;
 
-  private String idxName = "";
-  private String idxType = "";
+  private String idxName = "traffic";
+  private String idxType = "data";
 
 
   /**
@@ -212,6 +212,7 @@ public class ElasticClient {
   public void setIdxType(String idxType) {
     this.idxType = idxType;
   }
+
 
 
 }
