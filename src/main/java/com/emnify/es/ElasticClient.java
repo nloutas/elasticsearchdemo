@@ -10,6 +10,7 @@ import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
@@ -151,6 +152,23 @@ public class ElasticClient {
   public boolean deleteEntry(String id) {
     DeleteResponse delResponse = esClient.prepareDelete(idxName, idxType, id).execute().actionGet();
     return delResponse.isFound();
+  }
+
+  /**
+   * @param id String
+   * @param entry HashMap of String keys
+   * @return boolean if updated or failed
+   */
+  public long updateEntry(String id, HashMap<String, ?> entry) {
+    try {
+      UpdateResponse updateResponse =
+          esClient.prepareUpdate(idxName, idxType, id).setDoc(entry).get();
+
+      return updateResponse.getVersion();
+    } catch (Exception e) {
+      log.error("Exception: " + e.getMessage());
+    }
+    return 0L;
   }
 
 

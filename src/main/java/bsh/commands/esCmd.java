@@ -66,6 +66,10 @@ public class esCmd {
           env.println("Found entry: " + jsonBuilder().map(entry).string());
         }
         break;
+      case "update":
+        long version = ec.updateEntry(id, getEntry());
+        success = version > 0l;
+        break;
       case "delete":
         success = ec.deleteEntry(id);
         break;
@@ -92,7 +96,7 @@ public class esCmd {
 
 
     if (!success) {
-      env.error("Command " + command + " failed!");
+      env.error("Command '" + command + "' failed!");
       return NOK_STATUS;
     } else {
       return OK_STATUS;
