@@ -19,17 +19,27 @@ import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 
+/**
+ * @author sebastian
+ *
+ */
 public class ElasticTransportClient {
 
   private static Settings settings;
   private static TransportClient client;
 
+  /**
+   * @param args Strings
+   * @throws InterruptedException upwards
+   * @throws IOException upwards
+   * @throws ExecutionException upwards
+   */
   public static void main(String[] args) throws InterruptedException, IOException,
       ExecutionException {
 
     loadConfig();
 
-    client = TransportClient.builder().build();
+    client = TransportClient.builder().settings(settings).build();
 
     client.addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(settings
         .get("network.host")), settings.getAsInt("network.transport.tcp.port", 6666)));
@@ -97,6 +107,9 @@ public class ElasticTransportClient {
     client.close();
   }
 
+  /**
+   * @throws IOException if elasticsearch.yml cannot be read
+   */
   public static void loadConfig() throws IOException {
     InputStream is =
         ElasticTransportClient.class.getClassLoader().getResource("elasticsearch.yml").openStream();

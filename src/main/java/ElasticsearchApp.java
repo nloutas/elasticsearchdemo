@@ -1,6 +1,5 @@
 
 import org.joda.time.DateTime;
-import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -15,12 +14,9 @@ public class ElasticsearchApp {
    * @param args String array
    */
   public static void main(String[] args) {
-    try {
-      ec = new ElasticClient("traffic", "100001");
-    } catch (UnknownHostException e) {
-      e.printStackTrace();
-      System.exit(-1);
-    }
+
+    ec = new ElasticClient("traffic", "100001");
+
 
     HashMap<String, String> entry = new HashMap<String, String>();
     entry.put("teid", "1");

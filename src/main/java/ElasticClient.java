@@ -44,9 +44,8 @@ public class ElasticClient {
   /**
    * @param idxName String
    * @param idxType String
-   * @throws UnknownHostException elasticHost is invalid
    */
-  public ElasticClient(String idxName, String idxType) throws UnknownHostException {
+  public ElasticClient(String idxName, String idxType) {
     this();
     this.idxName = idxName;
     this.idxType = idxType;
@@ -55,22 +54,25 @@ public class ElasticClient {
   /**
    * constructor
    *
-   * @throws UnknownHostException elasticHost is invalid
    */
-  public ElasticClient() throws UnknownHostException {
+  public ElasticClient() {
 
     try {
       InputStream is = getClass().getClassLoader().getResource("elasticsearch.yml").openStream();
       settings = Settings.settingsBuilder().loadFromStream("elasticsearch.yml", is).build();
-      esClient = TransportClient.builder().settings(settings).build();
     } catch (IOException e) {
       log.error("Cannot load configuration from elasticsearch.yml");
       System.exit(-1);
     }
-    String elasticHost = settings.get("network.host", "localhost");
-    Integer elasticPort = settings.getAsInt("http.port", 9300);
-    esClient.addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(elasticHost),
-        elasticPort));
+    esClient = TransportClient.builder().settings(settings).build();
+    String host = settings.get("network.host", "localhost");
+    Integer port = settings.getAsInt("network.transport.tcp.port", 9300);
+    try {
+      esClient.addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(host), port));
+    } catch (UnknownHostException e) {
+      log.error("Cannot resolve host " + host);
+      System.exit(-1);
+    }
 
     esClient.connectedNodes().forEach(action -> {
       log.info("Connected Node HostAddress: " + action.getHostAddress());
