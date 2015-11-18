@@ -41,7 +41,18 @@
       <artifactId>commons-io</artifactId>
       <version>2.4</version>
     </dependency>
-
+    
+   <dependency>
+     <groupId>org.glassfish.jersey.core</groupId>
+     <artifactId>jersey-client</artifactId>
+     <version>2.13</version>
+   </dependency>
+   
+   <dependency>
+     <groupId>org.glassfish.jersey.media</groupId>
+     <artifactId>jersey-media-json-jackson</artifactId>
+     <version>2.13</version>
+   </dependency>
   </dependencies>
 
 

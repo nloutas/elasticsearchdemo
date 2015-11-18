@@ -1,6 +1,7 @@
 cluster.name: emnify_es
 
 network.host: localhost
+network.transport.tcp.port: 9300
 http.port: 9200
 
 script.inline: on
