@@ -7,7 +7,6 @@ import com.emnify.es.ElasticClient;
 
 import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -49,12 +48,12 @@ public class esCmd {
    */
   public static int invoke(Interpreter env, CallStack callstack, String command, String id)
       throws Exception {
+    env.println("Running command '" + command + "' with parameter '" + id + "'");
+
     boolean success = false;
     if (id.length() == 0) {
       id = UUID.randomUUID().toString();
     }
-
-    env.println("Running command '" + command + "' for id " + id);
 
     switch (command) {
       case "index":
@@ -78,12 +77,10 @@ public class esCmd {
         SearchHits hits = ec.search(id, 0, 0, true);
         if (hits != null) {
           success = true;
+          env.println("search total hits: " + hits.getTotalHits());
           hits.forEach(hit -> {
-            try {
-              env.println("Found entry: " + jsonBuilder().map(hit.fields()).string());
-            } catch (IOException e) {
-              env.error("Error parsing search hit: " + e.getMessage());
-            }
+            env.println("Found entry with id " + hit.getId() + ", score " + hit.getScore()
+                + ", source " + hit.getSourceAsString());
           });
         }
 
