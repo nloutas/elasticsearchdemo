@@ -184,7 +184,11 @@ public class ElasticClient {
 
     if (!searchTerm.isEmpty()) {
       String[] searchSplit = searchTerm.split(":");
-      search.setPostFilter(QueryBuilders.matchQuery(searchSplit[0], searchSplit[1]));
+      if (searchSplit.length==2) {
+        search.setPostFilter(QueryBuilders.matchQuery(searchSplit[0], searchSplit[1]));
+      } else {
+        return null;
+      }
     }
     if (from > 0) {
       search.setFrom(from);
