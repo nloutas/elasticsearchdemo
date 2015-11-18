@@ -183,7 +183,8 @@ public class ElasticClient {
     SearchRequestBuilder search = esClient.prepareSearch(idxName).setTypes(idxType);
 
     if (!searchTerm.isEmpty()) {
-      search.setPostFilter(QueryBuilders.existsQuery(searchTerm));
+      String[] searchSplit = searchTerm.split(":");
+      search.setPostFilter(QueryBuilders.matchQuery(searchSplit[0], searchSplit[1]));
     }
     if (from > 0) {
       search.setFrom(from);
