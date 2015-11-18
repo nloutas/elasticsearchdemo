@@ -35,15 +35,24 @@ public class ElasticHttpClient {
 
     System.out.println("GET: " + res.readEntity(String.class));
 
-
-
+    XContentBuilder queryBuilder =
+        XContentFactory.jsonBuilder().startObject().field("version",true).startObject("query").startObject("match").field("user", "bier").endObject().endObject().endObject();
+    Thread.sleep(5000L);
+    res = client.search("twitter", "tweet", queryBuilder.string());
+    
+    System.out.println("Search request body: " + queryBuilder.string());
+    
+    System.out.println("SEARCH: " + res.readEntity(String.class));
+    
     builder = XContentFactory.jsonBuilder().startObject().field("user", "male").endObject();
 
     res = client.put("twitter", "tweet", "1", builder.string());
 
     System.out.println("UPDATE: " + res.readEntity(String.class));
-
-
+    Thread.sleep(5000L);
+    res = client.search("twitter", "tweet", queryBuilder.string());
+    System.out.println("SEARCH: " + res.readEntity(String.class));
+    
 
     res = client.get("twitter", "tweet", "1");
 
