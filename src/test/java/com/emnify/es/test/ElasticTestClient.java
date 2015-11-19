@@ -1,3 +1,4 @@
+package com.emnify.es.test;
 
 import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
 
@@ -9,6 +10,7 @@ import org.elasticsearch.node.Node;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,17 +29,25 @@ public class ElasticTestClient implements AutoCloseable {
    */
   public ElasticTestClient() {
 
+    loadConfig();
     try {
-      InputStream is = getClass().getClassLoader().getResource("elasticsearch.yml").openStream();
-      settings = Settings.settingsBuilder().loadFromStream("elasticsearch.yml", is).build();
-
       // cleanup old test data
       File dataPath = new File(settings.get("path.home") + "/data/" + settings.get("cluster.name"));
       FileUtils.deleteDirectory(dataPath);
 
       node = nodeBuilder().settings(settings).local(true).node();
     } catch (IOException e) {
+      log.error("Cannot clean old test data!");
+    }
+  }
+
+  private void loadConfig() {
+    try {
+      InputStream is = getClass().getClassLoader().getResource("elasticsearch.yml").openStream();
+      settings = Settings.settingsBuilder().loadFromStream("elasticsearch.yml", is).build();
+    } catch (IOException e) {
       log.error("Cannot load configuration from elasticsearch.yml");
+      System.exit(-1);
     }
   }
 
@@ -69,6 +79,9 @@ public class ElasticTestClient implements AutoCloseable {
   }
 
 
+  /**
+   * close the es client
+   */
   public void close() {
     if (esClient != null) {
       esClient.close();

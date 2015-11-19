@@ -16,7 +16,7 @@ import org.elasticsearch.search.SearchHits;
 import org.joda.time.DateTime;
 
 /**
- * @author nikos
+ * invoke ElasticClient commands from bsh shell
  *
  */
 public class esCmd {

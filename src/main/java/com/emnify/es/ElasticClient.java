@@ -14,7 +14,6 @@ import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
-import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHits;
@@ -58,13 +57,7 @@ public class ElasticClient {
    */
   public ElasticClient() {
 
-    try {
-      InputStream is = getClass().getClassLoader().getResource("elasticsearch.yml").openStream();
-      settings = Settings.settingsBuilder().loadFromStream("elasticsearch.yml", is).build();
-    } catch (IOException e) {
-      log.error("Cannot load configuration from elasticsearch.yml");
-      System.exit(-1);
-    }
+    loadConfig();
     esClient = TransportClient.builder().settings(settings).build();
     String host = settings.get("network.host", "localhost");
     Integer port = settings.getAsInt("network.transport.tcp.port", 9300);
@@ -78,6 +71,16 @@ public class ElasticClient {
     esClient.connectedNodes().forEach(action -> {
       log.info("Connected Node HostAddress: " + action.getHostAddress());
     });
+  }
+
+  private void loadConfig() {
+    try {
+      InputStream is = getClass().getClassLoader().getResource("elasticsearch.yml").openStream();
+      settings = Settings.settingsBuilder().loadFromStream("elasticsearch.yml", is).build();
+    } catch (IOException e) {
+      log.error("Cannot load configuration from elasticsearch.yml");
+      System.exit(-1);
+    }
   }
 
   /**
@@ -104,14 +107,10 @@ public class ElasticClient {
    */
   public boolean indexEntry(String id, HashMap<String, ?> entry) {
 
-    XContentBuilder builder;
     try {
-      // generate JSON
-      builder = jsonBuilder().map(entry);
-
       // Index
       IndexResponse idxResponse = esClient.prepareIndex(idxName, idxType, id).setTTL(86400000L)
-          .setSource(builder.string()).execute().actionGet();
+          .setSource(jsonBuilder().map(entry).string()).execute().actionGet();
       return idxResponse.isCreated();
     } catch (IOException e) {
       log.error("Failed to index entry: '" + entry + "'. Exception: " + e.getMessage());

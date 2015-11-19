@@ -15,11 +15,21 @@ import java.util.concurrent.ExecutionException;
 import javax.ws.rs.core.Response;
 
 
+/**
+ * Elastic Client over Http (REST client)
+ *
+ */
 public class ElasticHttpClient {
 
   private static Settings settings;
   private static RestClient client;
 
+  /**
+   * @param args String array
+   * @throws InterruptedException upwards
+   * @throws IOException upwards
+   * @throws ExecutionException upwards
+   */
   public static void main(String[] args) throws InterruptedException, IOException,
       ExecutionException {
 
@@ -42,13 +52,13 @@ public class ElasticHttpClient {
 
     String query = new SearchSourceBuilder().query(QueryBuilders.matchQuery("user", "bier")).toString();
     Thread.sleep(5000L);
-    
+
     res = client.search("twitter", "tweet", query);
-    
+
     System.out.println("Search request body: " + query);
-    
+
     System.out.println("SEARCH: " + res.readEntity(String.class));
-    
+
     builder = XContentFactory.jsonBuilder().startObject().field("user", "male").endObject();
 
     res = client.put("twitter", "tweet", "1", builder.string());
@@ -57,7 +67,7 @@ public class ElasticHttpClient {
     Thread.sleep(5000L);
     res = client.search("twitter", "tweet", query);
     System.out.println("SEARCH: " + res.readEntity(String.class));
-    
+
 
     res = client.get("twitter", "tweet", "1");
 
@@ -81,7 +91,7 @@ public class ElasticHttpClient {
     System.out.println("GET: " + res.readEntity(String.class));
   }
 
-  public static void loadConfig() throws IOException {
+  private static void loadConfig() throws IOException {
     InputStream is =
         ElasticHttpClient.class.getClassLoader().getResource("elasticsearch.yml").openStream();
     settings = Settings.settingsBuilder().loadFromStream("elasticsearch.yml", is).build();
