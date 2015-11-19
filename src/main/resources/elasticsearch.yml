@@ -1,6 +1,8 @@
 cluster.name: emnify_es
+node.name: esdemo_node
 
-network.host: localhost
+#network.host: localhost
+network.host: 10.88.0.109
 network.transport.tcp.port: 9300
 http.port: 9200
 
@@ -12,3 +14,4 @@ script.groovy.sandbox.enabled: true
 client.transport.sniff: true
 client.transport.ping_timeout: "5s"
 client.transport.nodes_sampler_interval: "5s"
+

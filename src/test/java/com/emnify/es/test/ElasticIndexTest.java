@@ -1,3 +1,4 @@
+package com.emnify.es.test;
 
 
 import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
@@ -45,7 +46,6 @@ public class ElasticIndexTest {
   public void setUp() throws Exception {
     etc.start();
     esClient = etc.getClient();
-
   }
 
   /**
