@@ -1,8 +1,8 @@
 cluster.name: emnify_es
 node.name: esdemo_node
 
-#network.host: localhost
-network.host: 10.88.0.109
+network.host: localhost
+#network.host: 10.88.0.109
 network.transport.tcp.port: 9300
 http.port: 9200
 
