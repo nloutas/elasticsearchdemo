@@ -1,0 +1,33 @@
+---
+
+- name: Download the Public Signing Key for elastic.co repository
+  action: command
+      wget -O /tmp/GPG-KEY-elasticsearch  https://packages.elastic.co/GPG-KEY-elasticsearch
+
+
+- name: install the Public Signing Key for elastic.co repository
+  sudo: yes
+  action: command
+      apt-key add /tmp/GPG-KEY-elasticsearch
+
+
+- name: create repository file for elasticsearch
+  sudo: yes
+  file: path=/etc/apt/sources.list.d/elasticsearch.list state=touch mode="u=rw,g=r,o=r"
+
+- name: add repository definition for elasticsearch
+  lineinfile:
+    dest=/etc/apt/sources.list.d/elasticsearch.list
+    line="deb http://packages.elastic.co/elasticsearch/2.x/debian stable main"
+    insertafter=EOF
+    backup=no
+
+- name: apt update
+  sudo: yes
+  shell: apt-get update
+
+- name: Install elasticsearch and its dependencies
+  action: apt pkg={{item}} state=installed
+  with_items:
+     - elasticsearch
+
